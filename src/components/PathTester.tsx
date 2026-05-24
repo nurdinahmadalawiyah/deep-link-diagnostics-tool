@@ -22,8 +22,8 @@ export function PathTester({ domain, results }: PathTesterProps) {
   const fullUrl = `https://${domain.replace(/^https?:\/\//, '').replace(/\/+$/, '')}${path.startsWith('/') ? path : `/${path}`}`;
 
   let androidPackage = "com.your.package";
-  if (isAndroidSuccess && results.android.data && Array.isArray(results.android.data)) {
-    const target = results.android.data[0]?.target;
+  if (isAndroidSuccess && Array.isArray(results.android?.data)) {
+    const target = results.android?.data[0]?.target;
     if (target?.package_name) {
       androidPackage = target.package_name;
     }
