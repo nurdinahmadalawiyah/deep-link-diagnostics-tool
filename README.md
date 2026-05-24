@@ -1,8 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📱 Deep Link Diagnostics
 
-## Getting Started
+![Screenshot](./public/Screenshot%202026-05-24%20162132.png)
 
-First, run the development server:
+Deep Link Diagnostics is a modern, beautifully designed **Next.js Single Page Application (SPA)** that helps mobile developers instantly validate their server-side configurations for **iOS Universal Links** (`apple-app-site-association`) and **Android App Links** (`assetlinks.json`).
+
+Crafted with a sleek, glassmorphic UI, it eliminates the guesswork out of configuring your deep links by parsing raw files directly from your domain, validating them against official schemas, and cross-checking them via Apple CDN and Google API.
+
+---
+
+## ✨ Features
+
+- **🚀 Instant Validation:** Check your `.well-known` configuration files in milliseconds.
+- **🍎 Apple CDN & 🤖 Google API Checking:** Automatically pings Apple's CDN and Google's Digital Asset Links API to verify if the bots have crawled and cached your configuration files.
+- **🔍 Granular Platform Control:** Choose to validate only iOS, only Android, or both seamlessly.
+- **📊 Detailed Report Cards:** Clean, interactive UI providing status messages, success/error states, and the raw parsed JSON response.
+- **🧪 Local Path Tester:** Automatically generates ready-to-copy CLI commands (`xcrun` for iOS, `adb` for Android) allowing you to test specific paths directly on your local emulators.
+- **🎨 Premium Dark UI:** Built with Tailwind CSS, featuring glassmorphism, fluid micro-animations, and dynamic status banners.
+
+## 🛠️ Tech Stack
+
+- **Framework:** [Next.js 14](https://nextjs.org/) (App Router)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+- **Icons:** [Lucide React](https://lucide.dev/)
+- **Language:** TypeScript
+- **Validation:** JSON Schema checks (handling structural validity of App Links and Universal Links)
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (v18 or higher recommended)
+- npm, yarn, or pnpm
+
+### Installation
+
+1. Clone this repository to your local machine.
+2. Install the dependencies:
+
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
+
+3. Run the development server:
 
 ```bash
 npm run dev
@@ -10,27 +53,22 @@ npm run dev
 yarn dev
 # or
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to start validating your domains.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 💡 How It Works
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Enter your domain (e.g., `api.example.com`).
+2. Toggle the platforms you want to validate using the beautifully crafted pill buttons.
+3. The tool bypasses CORS restrictions by utilizing a Next.js API route (`/api/validate`) as a proxy.
+4. It fetches your `.well-known` files and instantly compares them against official Apple and Google formats.
+5. Review the generated reports, swap tabs to see what the official CDNs see, and use the Local Path Tester to generate ADB/xcrun commands!
 
-## Learn More
+## 👨‍💻 Author
 
-To learn more about Next.js, take a look at the following resources:
+Crafted with ♥ by [Nurdin Ahmad Alawiyah](https://github.com/nurdinahmadalawiyah).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📄 License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is licensed under the MIT License.
