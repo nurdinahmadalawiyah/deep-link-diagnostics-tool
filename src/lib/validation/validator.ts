@@ -82,31 +82,36 @@ async function fetchAndValidate(url: string, platform: "ios" | "android", cdnUrl
       result.message = `Failed to fetch. HTTP Status: ${response.status}`;
     } else {
       const contentType = response.headers.get("content-type") || "";
+      let contentTypeWarning = "";
       if (!contentType.includes("application/json") && !contentType.includes("text/json")) {
-        result.message = `Invalid Content-Type header. Expected 'application/json', got '${contentType}'`;
-      } else {
-        const text = await response.text();
-        try {
-          const data = JSON.parse(text);
-          result.data = data;
-          
-          const validate = platform === "ios" ? validateAasa : validateAssetLinks;
-          const isValid = validate(data);
+        contentTypeWarning = ` (Warning: Invalid Content-Type. Expected 'application/json', got '${contentType}')`;
+      }
 
-          if (!isValid) {
-            result.message = "JSON does not match the official schema.";
-            result.errors = validate.errors || undefined;
-          } else {
-            result.status = "success";
-            result.message = "Valid configuration found.";
-          }
-        } catch (e) {
-          result.message = "Invalid JSON format.";
-          result.expectedVsActual = {
-            expected: "{\n  \"applinks\": { ... } // for iOS\n  // or array for Android\n}",
-            actual: text,
-          };
+      const text = await response.text();
+      try {
+        const data = JSON.parse(text);
+        result.data = data;
+        
+        const validate = platform === "ios" ? validateAasa : validateAssetLinks;
+        const isValid = validate(data);
+
+        if (!isValid) {
+          result.message = "JSON does not match the official schema." + contentTypeWarning;
+          result.errors = validate.errors || undefined;
+        } else if (contentTypeWarning) {
+          // If JSON is valid but Content-Type is wrong, it's still technically an error for Apple/Google
+          result.status = "error";
+          result.message = "JSON is structurally valid, but the server returned an incorrect Content-Type." + contentTypeWarning;
+        } else {
+          result.status = "success";
+          result.message = "Valid configuration found.";
         }
+      } catch (e) {
+        result.message = "Invalid JSON format." + contentTypeWarning;
+        result.expectedVsActual = {
+          expected: "{\n  \"applinks\": { ... } // for iOS\n  // or array for Android\n}",
+          actual: text,
+        };
       }
     }
   } catch (error: any) {
